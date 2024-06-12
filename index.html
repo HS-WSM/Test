@@ -71,12 +71,14 @@
                 const marker = this.el;
                 marker.addEventListener('markerFound', () => {
                     const markerId = marker.id;
+                    console.log(`Marker Found: ${markerId}`); // Debug message
                     const event = new CustomEvent('markerFound', { detail: { markerId: markerId } });
                     window.dispatchEvent(event);
                 });
 
                 marker.addEventListener('markerLost', () => {
                     const markerId = marker.id;
+                    console.log(`Marker Lost: ${markerId}`); // Debug message
                     const event = new CustomEvent('markerLost', { detail: { markerId: markerId } });
                     window.dispatchEvent(event);
                 });
@@ -87,6 +89,7 @@
         let marker2Visible = false;
 
         function checkInteraction() {
+            console.log(`Marker1 Visible: ${marker1Visible}, Marker2 Visible: ${marker2Visible}`); // Debug message
             if (marker1Visible && marker2Visible) {
                 document.querySelector('#entity1').setAttribute('animation', {
                     property: 'position',
