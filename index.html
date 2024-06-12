@@ -111,6 +111,7 @@
         }
 
         window.addEventListener('markerFound', (event) => {
+            console.log(`Event Marker Found: ${event.detail.markerId}`); // Debug message
             if (event.detail.markerId === 'marker1') {
                 marker1Visible = true;
             } else if (event.detail.markerId === 'marker2') {
@@ -120,6 +121,7 @@
         });
 
         window.addEventListener('markerLost', (event) => {
+            console.log(`Event Marker Lost: ${event.detail.markerId}`); // Debug message
             if (event.detail.markerId === 'marker1') {
                 marker1Visible = false;
             } else if (event.detail.markerId === 'marker2') {
