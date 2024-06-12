@@ -64,5 +64,66 @@
 
         <a-entity camera></a-entity>
     </a-scene>
+
+    <script>
+        AFRAME.registerComponent('markerhandler', {
+            init: function () {
+                const marker = this.el;
+                marker.addEventListener('markerFound', () => {
+                    const markerId = marker.id;
+                    const event = new CustomEvent('markerFound', { detail: { markerId: markerId } });
+                    window.dispatchEvent(event);
+                });
+
+                marker.addEventListener('markerLost', () => {
+                    const markerId = marker.id;
+                    const event = new CustomEvent('markerLost', { detail: { markerId: markerId } });
+                    window.dispatchEvent(event);
+                });
+            },
+        });
+
+        let marker1Visible = false;
+        let marker2Visible = false;
+
+        function checkInteraction() {
+            if (marker1Visible && marker2Visible) {
+                document.querySelector('#entity1').setAttribute('animation', {
+                    property: 'position',
+                    to: '0 0 0',
+                    dur: 2000,
+                    easing: 'linear'
+                });
+
+                document.querySelector('#entity2').setAttribute('animation', {
+                    property: 'position',
+                    to: '0 0 0',
+                    dur: 2000,
+                    easing: 'linear'
+                });
+            } else {
+                document.querySelector('#entity1').removeAttribute('animation');
+                document.querySelector('#entity2').removeAttribute('animation');
+            }
+        }
+
+        window.addEventListener('markerFound', (event) => {
+            if (event.detail.markerId === 'marker1') {
+                marker1Visible = true;
+            } else if (event.detail.markerId === 'marker2') {
+                marker2Visible = true;
+            }
+            checkInteraction();
+        });
+
+        window.addEventListener('markerLost', (event) => {
+            if (event.detail.markerId === 'marker1') {
+                marker1Visible = false;
+            } else if (event.detail.markerId === 'marker2') {
+                marker2Visible = false;
+            }
+            checkInteraction();
+        });
+    </script>
 </body>
 </html>
