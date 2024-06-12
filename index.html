@@ -32,6 +32,7 @@
             raycaster="objects: .clickable"
             emitevents="true"
             cursor="fuse: false; rayOrigin: mouse;"
+            markerhandler
         >
             <a-entity
                 id="entity1"
@@ -51,6 +52,7 @@
             raycaster="objects: .clickable"
             emitevents="true"
             cursor="fuse: false; rayOrigin: mouse;"
+            markerhandler
         >
             <a-entity
                 id="entity2"
@@ -71,14 +73,14 @@
                 const marker = this.el;
                 marker.addEventListener('markerFound', () => {
                     const markerId = marker.id;
-                    console.log(`Marker Found: ${markerId}`); // Debug message
+                    console.log(`Marker Found: ${markerId}`);
                     const event = new CustomEvent('markerFound', { detail: { markerId: markerId } });
                     window.dispatchEvent(event);
                 });
 
                 marker.addEventListener('markerLost', () => {
                     const markerId = marker.id;
-                    console.log(`Marker Lost: ${markerId}`); // Debug message
+                    console.log(`Marker Lost: ${markerId}`);
                     const event = new CustomEvent('markerLost', { detail: { markerId: markerId } });
                     window.dispatchEvent(event);
                 });
@@ -89,7 +91,7 @@
         let marker2Visible = false;
 
         function checkInteraction() {
-            console.log(`Marker1 Visible: ${marker1Visible}, Marker2 Visible: ${marker2Visible}`); // Debug message
+            console.log(`Marker1 Visible: ${marker1Visible}, Marker2 Visible: ${marker2Visible}`);
             if (marker1Visible && marker2Visible) {
                 document.querySelector('#entity1').setAttribute('animation', {
                     property: 'position',
@@ -104,14 +106,35 @@
                     dur: 2000,
                     easing: 'linear'
                 });
+
+                // Example interaction: rotate entities
+                document.querySelector('#entity1').setAttribute('animation__rotate', {
+                    property: 'rotation',
+                    to: '0 360 0',
+                    dur: 2000,
+                    easing: 'linear',
+                    loop: true
+                });
+
+                document.querySelector('#entity2').setAttribute('animation__rotate', {
+                    property: 'rotation',
+                    to: '0 360 0',
+                    dur: 2000,
+                    easing: 'linear',
+                    loop: true
+                });
+
             } else {
                 document.querySelector('#entity1').removeAttribute('animation');
                 document.querySelector('#entity2').removeAttribute('animation');
+
+                document.querySelector('#entity1').removeAttribute('animation__rotate');
+                document.querySelector('#entity2').removeAttribute('animation__rotate');
             }
         }
 
         window.addEventListener('markerFound', (event) => {
-            console.log(`Event Marker Found: ${event.detail.markerId}`); // Debug message
+            console.log(`Event Marker Found: ${event.detail.markerId}`);
             if (event.detail.markerId === 'marker1') {
                 marker1Visible = true;
             } else if (event.detail.markerId === 'marker2') {
@@ -121,7 +144,7 @@
         });
 
         window.addEventListener('markerLost', (event) => {
-            console.log(`Event Marker Lost: ${event.detail.markerId}`); // Debug message
+            console.log(`Event Marker Lost: ${event.detail.markerId}`);
             if (event.detail.markerId === 'marker1') {
                 marker1Visible = false;
             } else if (event.detail.markerId === 'marker2') {
